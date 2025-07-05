@@ -30,7 +30,7 @@ For cert-manager to handle the challenge, it needs a Cloudflare token to modify 
 
 ## GitHub setup
 
-You'll need to create a (private) repo for your gitops repo from the [template repo](https://github.com/laurence404/gitops-template). Generate a SSH key locally using `ssh-keygen -f id_rsa_github`, add the public key as an access key to the repo on github, then connect to the repo in ArgoCD and paste in the private key.
+You'll need to create a (private) repo for your gitops repo from the [template repo](https://github.com/laurence404/gitops-template-kairos). Generate a SSH key locally using `ssh-keygen -f id_rsa_github`, add the public key as an access key to the repo on github, then connect to the repo in ArgoCD and paste in the private key.
 
 ## Setup ArgoCD
 
