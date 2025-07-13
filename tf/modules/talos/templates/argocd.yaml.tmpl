@@ -1,0 +1,102 @@
+cluster:
+  inlineManifests:
+    - name: argocd-install-config
+      contents: |-
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: argocd-install
+          namespace: kube-system
+        data:
+          gitops-helm.yaml: |
+            apiVersion: argoproj.io/v1alpha1
+            kind: ApplicationSet
+            metadata:
+              name: gitops-helm
+              namespace: argocd
+            spec:
+              generators:
+                - git:
+                    files:
+                        - path: '*/Chart.yaml'
+                    repoURL: ${ssh_clone_url}
+                    revision: HEAD
+              goTemplate: true
+              goTemplateOptions:
+                - missingkey=error
+              ignoreApplicationDifferences:
+                - jsonPointers:
+                    - /spec/syncPolicy
+              syncPolicy:
+                preserveResourcesOnDeletion: true
+              template:
+                metadata:
+                  annotations:
+                    argocd.argoproj.io/manifest-generate-paths: .
+                  name: '{{.path.basename}}'
+                spec:
+                  destination:
+                    namespace: '{{.path.basename}}'
+                    server: https://kubernetes.default.svc
+                  project: default
+                  source:
+                    helm:
+                      values: |
+                        domain: "${domain}"
+                        aud: "${aud}"
+                        teamName: "${teamname}"
+                    path: '{{.path.path}}'
+                    repoURL: ${ssh_clone_url}
+                    targetRevision: HEAD
+                  syncPolicy:
+                    automated: {}
+                    managedNamespaceMetadata:
+                      labels:
+                        pod-security.kubernetes.io/enforce: ${default_pss_profile}
+                    syncOptions:
+                      - CreateNamespace=true
+                      - ServerSideApply=true
+          gitops-kustomize.yaml: |
+            apiVersion: argoproj.io/v1alpha1
+            kind: ApplicationSet
+            metadata:
+              name: gitops-kustomize
+              namespace: argocd
+            spec:
+              generators:
+                - git:
+                    files:
+                        - path: '*/kustomization.yaml'
+                    repoURL: ${ssh_clone_url}
+                    revision: HEAD
+              goTemplate: true
+              goTemplateOptions:
+                - missingkey=error
+              ignoreApplicationDifferences:
+                - jsonPointers:
+                    - /spec/syncPolicy
+              syncPolicy:
+                preserveResourcesOnDeletion: true
+              template:
+                metadata:
+                  annotations:
+                    argocd.argoproj.io/manifest-generate-paths: .
+                  name: '{{.path.basename}}'
+                spec:
+                  destination:
+                    namespace: '{{.path.basename}}'
+                    server: https://kubernetes.default.svc
+                  project: default
+                  source:
+                    path: '{{.path.path}}'
+                    repoURL: ${ssh_clone_url}
+                    targetRevision: HEAD
+                  syncPolicy:
+                    automated: {}
+                    managedNamespaceMetadata:
+                      labels:
+                        pod-security.kubernetes.io/enforce: ${default_pss_profile}
+                    syncOptions:
+                      - CreateNamespace=true
+                      - ServerSideApply=true
+                      

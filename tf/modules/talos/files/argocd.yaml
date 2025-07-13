@@ -1,0 +1,78 @@
+cluster:
+  inlineManifests:
+    - name: argocd-install
+      contents: |
+        ---
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: argocd-install
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: cluster-admin
+        subjects:
+        - kind: ServiceAccount
+          name: argocd-install
+          namespace: kube-system
+        ---
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: argocd-install
+          namespace: kube-system
+        ---
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: argocd-install
+          namespace: kube-system
+        spec:
+          backoffLimit: 10
+          template:
+            metadata:
+              labels:
+                app: argocd-install
+            spec:
+              restartPolicy: OnFailure
+              serviceAccountName: argocd-install
+              volumes:
+                - name: data
+                  configMap:
+                    name: argocd-install
+                - name: home
+                  emptyDir: {}
+              initContainers:
+                - name: helm-repo-add
+                  image: chainguard/helm:latest
+                  args:
+                    - repo
+                    - add
+                    - argo
+                    - https://argoproj.github.io/argo-helm
+                  volumeMounts:
+                    - name: home
+                      mountPath: /home/nonroot
+                - name: helm-install
+                  image: chainguard/helm:latest
+                  args:
+                    - install
+                    - argocd
+                    - argo/argo-cd
+                    - --version
+                    - 8.1.1
+                    - --namespace
+                    - argocd
+                  volumeMounts:
+                    - name: home
+                      mountPath: /home/nonroot
+              containers:
+                - name: kubectl-apply-cm
+                  image: registry.k8s.io/kubectl:v1.33.2
+                  args:
+                    - apply
+                    - -f
+                    - /data
+                  volumeMounts:
+                    - name: data
+                      mountPath: /data
