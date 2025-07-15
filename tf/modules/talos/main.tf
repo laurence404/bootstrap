@@ -22,39 +22,47 @@ data "talos_client_configuration" "this" {
   endpoints            = [var.local_ip]
 }
 
+resource "random_password" "luks_passphrase" {
+  length = 16
+}
+
 resource "talos_machine_configuration_apply" "controlplane" {
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   node                        = var.local_ip
-  config_patches = [
-    file("${path.module}/files/cp-scheduling.yaml"),
-    file("${path.module}/files/delete-label.yaml"),
-    file("${path.module}/files/argocd.yaml"),
-    file("${path.module}/files/sysctl.yaml"),
-    file("${path.module}/files/cilium.yaml"),
-    templatefile("${path.module}/templates/secrets.yaml.tmpl", {
-      ssh_clone_url                 = var.ssh_clone_url
-      ssh_deploy_key                = indent(12, var.ssh_deploy_key)
-      cloudflare_cert_manager_token = var.cloudflare_cert_manager_token
-      cloudflare_tunnel_token       = var.cloudflare_tunnel_token
-    }),
-    templatefile("${path.module}/templates/argocd.yaml.tmpl", {
-      ssh_clone_url       = var.ssh_clone_url
-      domain              = var.domain
-      aud                 = var.cloudflare_aud
-      teamname            = var.cloudflare_team_name
-      default_pss_profile = var.default_pss_profile
-    }),
-    yamlencode({
-      machine = {
-        install = {
-          disk = var.disk
+  config_patches = concat(
+    [
+      file("${path.module}/files/cp-scheduling.yaml"),
+      file("${path.module}/files/delete-label.yaml"),
+      file("${path.module}/files/argocd.yaml"),
+      file("${path.module}/files/sysctl.yaml"),
+      file("${path.module}/files/cilium.yaml"),
+      templatefile("${path.module}/templates/secrets.yaml.tmpl", {
+        ssh_clone_url                 = var.ssh_clone_url
+        ssh_deploy_key                = indent(12, var.ssh_deploy_key)
+        cloudflare_cert_manager_token = var.cloudflare_cert_manager_token
+        cloudflare_tunnel_token       = var.cloudflare_tunnel_token
+      }),
+      templatefile("${path.module}/templates/argocd.yaml.tmpl", {
+        ssh_clone_url       = var.ssh_clone_url
+        domain              = var.domain
+        aud                 = var.cloudflare_aud
+        teamname            = var.cloudflare_team_name
+        default_pss_profile = var.default_pss_profile
+      }),
+      yamlencode({
+        machine = {
+          install = {
+            disk  = var.disk
+            image = var.image
+          }
         }
-      }
-    }),
-    file("${path.module}/files/volumeconfig.yaml"),
-    file("${path.module}/files/uservolumeconfig.yaml"),
-  ]
+      }),
+      file("${path.module}/files/volumeconfig.yaml"),
+    ],
+    var.disk_encryption ? [templatefile("${path.module}/templates/systemdiskencryption.yaml.tmpl", { luks_passphrase = random_password.luks_passphrase.result })] : [],
+    var.disk_encryption ? [templatefile("${path.module}/templates/uservolumeconfig-encryption.yaml.tmpl", { luks_passphrase = random_password.luks_passphrase.result })] : [file("${path.module}/files/uservolumeconfig.yaml")],
+  )
 }
 
 resource "talos_machine_bootstrap" "this" {

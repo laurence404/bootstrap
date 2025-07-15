@@ -32,4 +32,6 @@ module "talos" {
   local_ip                      = var.local_ip
   cluster_name                  = var.cluster_name
   disk                          = var.disk
+  disk_encryption               = var.disk_encryption
+  image                         = var.image
 }

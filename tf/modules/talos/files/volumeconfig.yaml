@@ -4,4 +4,4 @@ name: EPHEMERAL
 provisioning:
   diskSelector:
     match: system_disk
-  maxSize: 16GB
+  maxSize: 32GB
