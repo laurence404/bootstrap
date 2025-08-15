@@ -183,6 +183,7 @@ resource "cloudflare_zero_trust_access_policy" "non_interactive" {
 
   include = [{
     any_valid_service_token = {}
+  },{
     certificate             = {}
   }]
 }
@@ -205,14 +206,12 @@ resource "cloudflare_zone_setting" "main" {
     min_tls_version  = "1.2"
   })
   zone_id    = data.cloudflare_zones.main.result[0].id
-  id         = each.key
   setting_id = each.key
   value      = each.value
 }
 
 resource "cloudflare_zone_setting" "security_header" {
   zone_id    = data.cloudflare_zones.main.result[0].id
-  id         = "security_header"
   setting_id = "security_header"
   value = {
     strict_transport_security = {
