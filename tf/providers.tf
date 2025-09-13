@@ -19,11 +19,6 @@ provider "cloudflare" {
 provider "random" {
 }
 
-provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = var.kubernetes_context
-}
-
 provider "github" {
   token = var.github_token
 }

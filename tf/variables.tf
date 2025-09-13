@@ -71,13 +71,31 @@ variable "allowed_email_addresses" {
   type        = list(string)
 }
 
-variable "kubernetes_context" {
-  description = "Context in .kube/config to use"
-  type        = string
-}
-
 variable "default_pss_profile" {
   description = "Default pod security standard policy on namespaces"
   type        = string
   default     = "privileged"
+}
+
+variable "cluster_name" {
+  description = "Name of Kubernetes cluster"
+  type        = string
+  default     = "homecloudlab"
+}
+
+variable "disk" {
+  description = "Device to install talos onto"
+  type        = string
+}
+
+variable "disk_encryption" {
+  description = "If true, encrypt disks with TPM sealed key"
+  type        = bool
+  default     = false
+}
+
+variable "image" {
+  description = "Talos install image"
+  type        = string
+  default     = "ghcr.io/siderolabs/installer:v1.11.0"
 }

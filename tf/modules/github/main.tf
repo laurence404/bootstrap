@@ -14,7 +14,7 @@ resource "github_repository" "gitops" {
 
   template {
     owner                = "laurence404"
-    repository           = "gitops-template-kairos"
+    repository           = "gitops-template"
     include_all_branches = false
   }
 }

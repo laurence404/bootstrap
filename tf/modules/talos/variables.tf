@@ -1,3 +1,13 @@
+variable "local_ip" {
+  description = "Local IP of server"
+  type        = string
+}
+
+variable "cluster_name" {
+  description = "Name of Kubernetes cluster"
+  type        = string
+}
+
 variable "cloudflare_tunnel_token" {
   description = "Token for cloudflared tunnel"
   type        = string
@@ -38,5 +48,20 @@ variable "cloudflare_team_name" {
 
 variable "default_pss_profile" {
   description = "Default pod security standard policy on namespaces"
+  type        = string
+}
+
+variable "disk" {
+  description = "Device to install talos onto"
+  type        = string
+}
+
+variable "disk_encryption" {
+  description = "If true, encrypt disks with TPM sealed key"
+  type        = bool
+}
+
+variable "image" {
+  description = "Talos install image"
   type        = string
 }

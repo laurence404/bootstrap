@@ -23,7 +23,7 @@ Cloud is complicated and easy to misconfigure - [even](https://blog.qualys.com/v
 
 It's not just ensuring you don't ever misconfigure, but also any [charts](https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/the-risk-of-default-configuration-how-out-of-the-box-helm-charts-can-breach-your/4409560) you may use.
 
-This guide uses Cloudflare to minimise the risk of misconfiguration - there should be no mistakes you can make within Kubernetes or Kairos that will result in you exposing unauthenticated endpoints to the public Internet. This assumes that the Cloudflare configuration in this repo is sound - it should be simple enough to review.
+This guide uses Cloudflare to minimise the risk of misconfiguration - there should be no mistakes you can make within Kubernetes or Talos that will result in you exposing unauthenticated endpoints to the public Internet. This assumes that the Cloudflare configuration in this repo is sound - it should be simple enough to review.
 
 ## Slow patching
 
@@ -39,11 +39,11 @@ Changes to helm charts are opaque version number changes - however if you disabl
 
 Container updates are also opaque, suggest using a popular container with a good build process (e.g. [SLSA](https://slsa.dev) level 2 or above). There have been [public examples](https://unit42.paloaltonetworks.com/malicious-cryptojacking-images/) of containers on dockerhub containing crypto miners. Consider NetworkPolicy to segment workloads and disable egress if it's unnecessary.
 
-Configuring restricted [pod security admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) by default on namespaces will generally prevent container breakout, unless you've fallen behind patching Kairos (n-day), or a 0-day is used (very unlikely). 
+Configuring restricted [pod security admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) by default on namespaces will generally prevent container breakout, unless you've fallen behind patching Talos (n-day), or a 0-day is used (very unlikely). 
 
 ## Physical theft
 
-For example someone steals the server from your home, gaining access to personal data stored on it. Configure [partition encryption](https://kairos.io/docs/advanced/partition_encryption/) or [trusted boot](https://kairos.io/docs/installation/trustedboot/) to mitigate.
+For example someone steals the server from your home, gaining access to personal data stored on it. Enable disk encryption (which is sealed by the TPM) to mitigate.
 
 ## Local attacker
 
@@ -55,7 +55,7 @@ In no particular order
 
 ## Evil maid
 
-Someone with physical access tampers with the server in order to later get remote access - [trusted boot](https://kairos.io/docs/installation/trustedboot/) is a potential mitigation.
+Someone with physical access tampers with the server in order to later get remote access - enable disk encryption (which is sealed by the TPM) to mitigate.
 
 ## Cloud provider
 

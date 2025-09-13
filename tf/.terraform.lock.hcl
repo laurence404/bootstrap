@@ -2,36 +2,19 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/cloudflare/cloudflare" {
-  version     = "5.4.0"
+  version     = "5.8.4"
   constraints = "~> 5.0"
   hashes = [
-    "h1:Rs5gaiRip5QqC3cV6BhTtvfAvOILxTmY40Ktty3DeYY=",
-    "zh:08b35ad7c1125bd0f34a0e719231389a679dc4a0247aa7c46374a55f13658a5a",
-    "zh:10c68c3a847b22c85db45d401febb9b34e0c0dadc38c4cc8f22b031cc9ff53de",
-    "zh:1750f58bd37db19f1d92a4232db359505993f1e2d8ba7d6732b1b59f098da902",
-    "zh:3929072b8dab83cc630d18a2ec04b339342d6dea7da7f51b733ffbd2543177b8",
-    "zh:9b297eeb027cd7e01f392d94a408070dcb801f09bf58a60a1a7f356bd78b40f5",
-    "zh:9d90bd226699737d00532927491e7ae0c30a5df407d39d0a29fa0bb2eedb5a7e",
-    "zh:a3b28a5e0114488b50ef0887e3fb8f8baa74058d1b33a57b1c8917e5be954ef1",
-    "zh:afd7388049fdbe3b0c21f3141ad623c970ab6c341c8fbab91041dc665c4331f7",
+    "h1:KKDkASiiJZ0z35eJYZz1rxDm1nRuHzQko7+np5eMI0k=",
+    "zh:0e3ffc026d07699189406d7471f6a65e66a35065ee26b7cded6dfff0f5c22fba",
+    "zh:2819e632d8f5437ee8cafbd35a0b44b9ea685aabae95536da345f012b2cbd193",
+    "zh:3ec56bd9e5bcc8bb2012651fa3ad837934603aacdbbb06c2d579681398e993b2",
+    "zh:56f4acef08aee4ba0fca8830b341d46658c6b4f83e55a8badbf4324156d6edd7",
+    "zh:5a8481a1b1b756f5d13c44ae1c89fd04e24e00e85a1e182a80c593130e4061a5",
+    "zh:af2e89d30aed52d0f0477a782303605f58b9868ce6868449c0a2ee1cb1ff825b",
+    "zh:d2622f857b37386e9d58fe9bd8391f9ef5930e3bf78b6e8b1b2b888e3dcc7be2",
+    "zh:e8dd942e2252c52dc68aa75eaeac43053e2d04b768ac9ea191b8da79b9ec4472",
     "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
-  ]
-}
-
-provider "registry.opentofu.org/hashicorp/kubernetes" {
-  version = "2.36.0"
-  hashes = [
-    "h1:eHxAqiBgRe3rEy9aXtOrW/kEr33cyXBonseKSDdXwlw=",
-    "zh:15e42a6f8c6be77e0266edfb3765065c01e8fbcc8d75c794f1442f39cd9e6cfb",
-    "zh:2387195e7c80bc3ba93162c5c755482828b309a275d170e0c329145894dc6cb2",
-    "zh:27775d6f0b53a76c3f91689e553461a10ab2e07f7066ccb7cc0dce2cb8abf72f",
-    "zh:28e77e1dfafe5881bc28bec76e22735e4be2dcde468a8f3f08f32a52c6f1938e",
-    "zh:89b6571d33b6607499683b7b1fdfb95576ed08ab80539537c5460de1455df424",
-    "zh:91cdad0f3a5cb4a82669703f6f017b07e434748cff9b8991432043c733ae50a7",
-    "zh:a566611bc563c4e8ac843f6b6b868cf8dce2eccb908bd7605040b553983dc5e3",
-    "zh:d4efb26732e5fbd4e6a5e4c10eea62628d669c9c76e52c6485417c1e0a60fd99",
-    "zh:e87d8edc93920b75b88e7fb8d1a7941f2b7facc89931b72e4c74fcf137baee91",
-    "zh:f173c9c66edb046715db10adce1d603fe989a3634b26bb81d556de3de548bd94",
   ]
 }
 
@@ -89,5 +72,28 @@ provider "registry.opentofu.org/integrations/github" {
     "zh:f627a255e5809ec2375f79949c79417847fa56b9e9222ea7c45a463eb663f137",
     "zh:f7c02f762e4cf1de7f58bde520798491ccdd54a5bd52278d579c146d1d07d4f0",
     "zh:fbd1fee2c9df3aa19cf8851ce134dea6e45ea01cb85695c1726670c285797e25",
+  ]
+}
+
+provider "registry.opentofu.org/siderolabs/talos" {
+  version     = "0.9.0-alpha.0"
+  constraints = "0.9.0-alpha.0"
+  hashes = [
+    "h1:aJIAbggkIN/2/7JEjSz/PfHVFRXOokeHYt3hDII6kI0=",
+    "zh:0fa82a384b25a58b65523e0ea4768fa1212b1f5cfc0c9379d31162454fedcc9d",
+    "zh:12a822ecfcc14da28bb88887811a796f5165ee50d64967c5afea389da12e3d18",
+    "zh:5c2519abfbd5e45de4afd94e52d393235e3d09845af27c58aa98dd532311f47f",
+    "zh:6a99b169eaf46789c7465de27d2dea52ca799f39412390d0a28bb28f5b9e5a4e",
+    "zh:975daeb0ff5517e5a7a4357125f6e7d74041d87c853f9a52ecfd285ce972e51b",
+    "zh:b358aefccccf84dab4bf07f2b039814755fc282cbe30f20496013e311eae3463",
+    "zh:b4e3a0fddc38a05c25b8f1553098574d56959abeb2b5bf9e880208000a415231",
+    "zh:ba331d61225fac3f787f7acd4cc298a7e0ca43ee7536ce5ab7f6c9dfae4c8e9e",
+    "zh:bbd9bc936461d2be6c11a5abaa53f2618ac592bc7a6cc1ad9c4205fd73c95eac",
+    "zh:bdd77e81bf65074fbc891a7429ec3264a342bc7545978a6c108e87cec5bb2f56",
+    "zh:c132d34502d47436c5f31670f2c786c072bce6137e28cfb5d948f36721db5f66",
+    "zh:c39ac5467fff7e326b31ada5e734ba88b8f811c5d758c3ce2c9c886504cc232f",
+    "zh:f1083b82593be4c888e35f6c9c773a86551c8c7b5dac1f3fa69863820852fc87",
+    "zh:f40bc8da36b6dc3b95cc13d208b81e254346d78ab81624c07a2fa74148de7a8b",
+    "zh:f56b4589644078e21dbcdbb53cc278550a04fa9c02bc7eea3f5dc91648da2048",
   ]
 }

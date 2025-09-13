@@ -1,6 +1,3 @@
-> [!WARNING]  
-> This branch is for using [Kairos](https://kairos.io/) but is no longer maintained - the main branch has moved to [Talos Linux](https://www.talos.dev/)
-
 # What is this?
 
 This is a guide for building your own Kubernetes cloud lab at home with *everything* managed through a github repo, with apps exposed to selected github users[^1] using only their web browser. Offloads the the boring & hard stuff - security, authentication and patching of internet facing components to Cloudflare & GitHub.
@@ -18,8 +15,8 @@ and
 
 ## What do I need?
 
-* Hardware supported by [Kairos](https://kairos.io/) (e.g. Raspberry Pi 4 or a [x86 mini PC](https://www.servethehome.com/tag/tinyminimicro/) - _absolute_ minimum 4GB RAM) running 24x7, or a VM
-* Wired Ethernet (WiFi [is possible](https://kairos.io/docs/examples/wifi/), but not recommended)
+* Hardware supported by [Talos](https://www.talos.dev) (e.g. Raspberry Pi 4 or a [x86 mini PC](https://www.servethehome.com/tag/tinyminimicro/) - _absolute_ minimum 4GB RAM) running 24x7, or a VM. Instructions are for a single node, but more can be added
+* Wired Ethernet
 * A domain name (<$5 per year)
 * Free GitHub and Cloudflare account
 
@@ -29,9 +26,9 @@ When running a homelab you want the convenience of accessing it from anywhere, b
 
 ## Minimal admin
 
-Keeping things updated is dull. When things stop working you have to remember what config file or cloud provider settingyou tweaked a few months ago and why (aka. [clickops](https://medium.com/@malinisharma.nj/debunking-clickops-bbae641c3874)). We use a github repo ([template gitops repo](https://github.com/laurence404/gitops-template-kairos)) to control all the apps (helm charts or kustomize manifests) you want to run and their config which is automatically deployed when you change them. Dependabot will send you PRs you merge at your leisure with updates, which are then automatically rolled out. If it goes wrong you can revert. Kairos is used as an atomic container optimised OS, which is updated via git and requires no maintenance.
+Keeping things updated is dull. When things stop working you have to remember what config file or cloud provider setting you tweaked a few months ago and why (aka. [clickops](https://medium.com/@malinisharma.nj/debunking-clickops-bbae641c3874)). We use a github repo ([template gitops repo](https://github.com/laurence404/gitops-template)) to control all the apps (helm charts or kustomize manifests) you want to run and their config which is automatically deployed when you change them. Dependabot will send you PRs to merge at your leisure with updates, which are then automatically rolled out. If anything goes wrong you can revert. Talos is used as an atomic container optimised OS, which requires no maintenance.
 
-If you want to remove something you've been experimenting with - remove from git and delete the namespace and its gone.
+If you want to remove something you've been experimenting with - just remove from git and delete the namespace.
 
 Running terraform manually every time you add a new app is tiresome, so all the Cloudflare config is a one-off bootstrap. From then on, everything is via your git repo.
 
