@@ -1,64 +1,55 @@
 # Prerequisites
 
-* Hardware supported by [Kairos](https://kairos.io/) with a minimum of 4GB RAM e.g.
-  * Raspberry Pi 4 - minimum 16GB storage
-  * x86 PC - minimum 35GB storage
-  * virtual machine - minimum 35GB storage
+* Hardware supported by [Talos](https://www.talos.dev) with a minimum of 4GB RAM and 10GB storage and an Ethernet connection e.g.
+  * Raspberry Pi 4
+  * x86 PC 
+  * virtual machine
 * GitHub account
 * Cloudflare free plan account
 
 # Steps
 
-## 1. Prepare cloud-config
-Use [kairos/cloud-config.yaml](kairos/cloud-config.yaml) as a template and set a password and add your SSH public key.
+## 1. Install `talosctl`
 
-## 2. Install Kairos
-Download the Alpine flavour ISO from [here](https://kairos.io/docs/getting-started/)
+See [guide](https://www.talos.dev/v1.11/talos-guides/install/talosctl/)
+
+## 2. Install talos
+
+Follow relevant instructions below which will bring up talos in maintenance mode, ready to be bootstrapped with terraform. You should be able to run `talosctl` to interrogate the machine before installation, such as listing disks:
+
+```
+talosctl -n 192.168.xxx.xxx get disks --insecure
+```
 
 ### Raspberry Pi
 
-For Raspberry Pi, burn to SD card and add `cloud-config.yaml` following [these instructions](https://kairos.io/docs/installation/raspberry/). If using WiFi, [add this config](https://kairos.io/docs/examples/wifi/). Note: adding ssh_authorized_keys from github didn't work for me - use full key instead.
+See [guide](https://www.talos.dev/v1.11/talos-guides/install/single-board-computers/rpi_generic/)
 
-### x86 PC or VM
+### x86 PC
 
-For mini PC, burn to a USB and boot. For a VM run something like:
-```
-virt-install --name kairos-$(uuidgen | cut -d- -f1) --memory 4096 --vcpus 2 --disk size=35 --cdrom kairos-alpine-3.19-standard-amd64-generic-v3.3.3-k3sv1.32.2+k3s1.iso --os-variant alpinelinux3.19 --network bridge:virbr0
-```
-Once booted, use the address displayed on screen to connect to the [web UI](https://kairos.io/docs/installation/webui/), upload the `cloud-config.yaml` and apply.
+See [guide](https://www.talos.dev/v1.11/talos-guides/install/bare-metal-platforms/iso/). For secureboot, see this [guide](https://www.talos.dev/v1.11/talos-guides/install/bare-metal-platforms/secureboot/). On some systems you'll need to clear the secureboot keys to enter setup mode, or manually add from `loader/keys/auto`.
 
-## 3. Import cluster into local kubeconfig
+If you need an image with customised kernel arguments or additional modules (e.g. i915 drivers) generate one at the [Image factory](https://factory.talos.dev/).
 
-So you can access the cluster from your machine with tools such as `kubectl` and can apply config with terraform, you'll need to import the cluster config. The following assumes you don't already have a context called kairos:
+### VM
+
+Download [iso](https://github.com/siderolabs/talos/releases) and run: 
 
 ```
-SERVER_IP=xxx.xxx.xxx.xxx
-ssh kairos@${SERVER_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed s/default/kairos/ > kubeconfig-kairos.yaml
-kubectl --kubeconfig kubeconfig-kairos.yaml config set-cluster kairos --server=https://${SERVER_IP}:6443
-cp ~/.kube/config ~/.kube/config.bak
-KUBECONFIG=~/.kube/config.bak:$PWD/kubeconfig-kairos.yaml kubectl config view --merge --flatten > ~/.kube/config
-rm kubeconfig-kairos.yaml
-kubectl config use-context kairos
+virt-install --name talos-$(uuidgen | cut -d- -f1) --memory 4096 --vcpus 2 --disk size=50 --cdrom ~/Downloads/metal-amd64.iso --os-variant alpinelinux3.19 --network bridge:virbr0
 ```
 
-Check it works by running (you should see some argocd pods):
-```
-kubectl get pods --all-namespaces
-```
-
-## 4. Get a domain
+## 3. Get a domain
 
 Easiest to buy a domain through the Cloudflare dashboard and they don't add markup. Cheapest are [6-9 digit .xyz](https://en.m.wikipedia.org/wiki/.xyz#1.111B_Class) domains at $0.83 per year
 
 [Other registrars](https://spaceship.com) offer discounted first year but may charge more at renewal. This will then need to be onboarded to Cloudflare which may take a few hours.
 
-## 5. Enable Cloudflare Zero Trust
+## 4. Enable Cloudflare Zero Trust
 
 Click "Zero Trust" on the Cloudflare dashboard, choose a team name (e.g. your domain name without the suffix) and agreed to $0 plan (requires billing details). Make a note of the team domain for later when creating the GitHub oauth integration.
 
-## 6. Prepare terraform config
-
-Or if you don't want to use terraform, see [manual instructions](INSTALL-MANUAL.md).
+## 5. Prepare terraform config
 
 Checkout a copy of this repo if you've not already done so, and create `tf/terraform.tfvars`
 
@@ -71,7 +62,7 @@ cloudflare_account_email   = ""
 cloudflare_account_id      = ""
 # The domain you've bought or onboarded to Cloudflare
 domain                     = ""
-# The private IP of your server ($SERVER_IP)
+# The private IP of your server (shown on screen)
 local_ip                   = ""
 # Manually add GitHub oauth app - see https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
 # Homepage URL will be from Step 5 e.g. https://<something>.cloudflareaccess.com
@@ -81,8 +72,6 @@ github_oauth_client_id     = ""
 github_oauth_client_secret = ""
 # The github users that are allowed to access your apps
 allowed_email_addresses    = ["abc@example.com"]
-# The name of the kubectl context configured above
-kubernetes_context         = "kairos"
 # Generate Token (classic) with "repo" "admin:org" - https://github.com/settings/tokens
 github_token               = ""
 # The name of the repo to create for your gitops repo
@@ -94,19 +83,35 @@ dockerhub_username         = ""
 dockerhub_pat              = ""
 # (Optional) Default PSS profile - https://kubernetes.io/docs/concepts/security/pod-security-standards/). If unset will use privileged for maximum compatibility, but for security should be restricted (if some namespaces need a different profile, can be set in gitops - see cattle-system/templates/namespace.yaml)
 default_pss_profile        = "restricted"
+# Obtain correct disk by running talosctl -n 192.168.xxx.xxx get disks --insecure (e.g. /dev/sda)
+disk                       = ""
+# Set to true to encrypt disks using secureboot & TPM
+disk_encryption            = true
+# (Optional) Override default for secureboot image, or customised image
+image                      = "factory.talos.dev/installer-secureboot/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.11.0"
 ```
 
-## 7. Apply terraform below
+## 6. Apply terraform below
 
-You'll need Terraform of OpenTofu installed, then run:
+You'll need Terraform or OpenTofu installed, then run:
 ```
 cd tf
 tofu init
 tofu apply --auto-approve
 ```
 
-> [!WARNING]  
-> This repo uses the Cloudflare provider v5 to enable features not available in previous versions - however despite being GA there are still a [number of issues](https://github.com/cloudflare/terraform-provider-cloudflare/issues/5573) with it you might come across when reapplying subsequent times (although reappying shouldn't be necessary)
+## 7. Import cluster into local kubeconfig
+
+So you can access the cluster locally with tools such as `kubectl`, talosctl will import the Kubernetes credentials into your local kubernetes config:
+```
+tofu output -raw talosconfig > talosconfig
+talosctl -n 192.168.xxx.xxx --talosconfig=talosconfig kubeconfig
+```
+
+Check it works by running (you should see some argocd pods):
+```
+kubectl get pods --all-namespaces
+```
 
 ## 8. Test
 
@@ -127,3 +132,7 @@ Check ArgoCD is accessible via cloudflared: https://argocd.yourdomain.com
 Check ArgoCD is showing healthy apps
 
 After a minute check local domain (should have a valid LetsEncrypt certificate): https://whoami.local.yourdomain.com. If this doesn't work, check if your router filters DNS responses containing RFC1918 private IPs.
+
+## 9. Cleanup
+
+You may wish to rotate your [Cloudflare Global API key](https://dash.cloudflare.com/profile/api-tokens), so as not to leave a powerful credential in your terraform config and state. If its necessary to run terraform again, the new key can be added to `terraform.tfvars`.
