@@ -22,7 +22,7 @@ and
 
 ## Security
 
-When running a homelab you want the convenience of accessing it from anywhere, but not the worry of it being hacked because you didn't patch quickly enough or you [accidentally exposed unauthenticated or weak passwords](https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/the-risk-of-default-configuration-how-out-of-the-box-helm-charts-can-breach-your/4409560) to the Internet. This responsibility is all handled by Cloudflare and GitHub. For full details, see the [threat model](THREAT_MODEL.md)
+When running a homelab you want the convenience of accessing it from anywhere, but not the worry of it [getting hacked](https://www.reddit.com/r/selfhosted/comments/13f6b89/has_anyone_ever_had_their_homelab_or_network/) because you didn't [patch quickly enough](https://www.reddit.com/r/selfhosted/comments/1po9cx1/vps_hacked_over_and_over_what_am_i_doing_wrong/) or you [accidentally exposed unauthenticated or weak passwords](https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/the-risk-of-default-configuration-how-out-of-the-box-helm-charts-can-breach-your/4409560) to the Internet. This responsibility is all handled by Cloudflare and GitHub. For full details, see the [threat model](THREAT_MODEL.md)
 
 ## Minimal admin
 
