@@ -1,3 +1,5 @@
+Talos nodes need to be upgraded or rebooted at least once a year, so that [certificates are renewed](https://docs.siderolabs.com/talos/latest/security/cert-management)
+
 ## Upgrading Talos
 
 ```
