@@ -11,7 +11,7 @@
 
 ## 1. Install `talosctl`
 
-See [guide](https://www.talos.dev/v1.11/talos-guides/install/talosctl/)
+See [guide](https://www.talos.dev/v1.12/talos-guides/install/talosctl/)
 
 ## 2. Install talos
 
@@ -23,11 +23,11 @@ talosctl -n 192.168.xxx.xxx get disks --insecure
 
 ### Raspberry Pi
 
-See [guide](https://www.talos.dev/v1.11/talos-guides/install/single-board-computers/rpi_generic/)
+See [guide](https://www.talos.dev/v1.12/talos-guides/install/single-board-computers/rpi_generic/)
 
 ### x86 PC
 
-See [guide](https://www.talos.dev/v1.11/talos-guides/install/bare-metal-platforms/iso/). For secureboot, see this [guide](https://www.talos.dev/v1.11/talos-guides/install/bare-metal-platforms/secureboot/). On some systems you'll need to clear the secureboot keys to enter setup mode, or manually add from `loader/keys/auto`.
+See [guide](https://www.talos.dev/v1.12/talos-guides/install/bare-metal-platforms/iso/). For secureboot, see this [guide](https://www.talos.dev/v1.12/talos-guides/install/bare-metal-platforms/secureboot/). On some systems you'll need to clear the secureboot keys to enter setup mode, or manually add from `loader/keys/auto`.
 
 If you need an image with customised kernel arguments or additional modules (e.g. i915 drivers) generate one at the [Image factory](https://factory.talos.dev/).
 
@@ -88,7 +88,7 @@ disk                       = ""
 # Set to true to encrypt disks using secureboot & TPM
 disk_encryption            = true
 # (Optional) Override default for secureboot image, or customised image
-image                      = "factory.talos.dev/installer-secureboot/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.11.0"
+image                      = "factory.talos.dev/installer-secureboot/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.12.0"
 ```
 
 ## 6. Apply terraform below

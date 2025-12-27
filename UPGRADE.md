@@ -7,6 +7,8 @@ talosctl -n $SERVER_IP --talosconfig=./talosconfig upgrade --image <image_from_t
 ```
 If you have a PodDisruptionBudget preventing eviction of any pods, this will take a take a while before eventually forcing eviction
 
+You might also want to update your `terraform.tfvars` in case you need to reinstall in the future
+
 ## Upgrading Kubernetes
 
 ```

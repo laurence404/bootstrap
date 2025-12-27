@@ -97,5 +97,5 @@ variable "disk_encryption" {
 variable "image" {
   description = "Talos install image"
   type        = string
-  default     = "ghcr.io/siderolabs/installer:v1.11.0"
+  default     = "ghcr.io/siderolabs/installer:v1.12.0"
 }

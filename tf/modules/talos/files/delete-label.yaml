@@ -1,2 +1,3 @@
-- op: remove
-  path: /machine/nodeLabels/node.kubernetes.io~1exclude-from-external-load-balancers
+machine:
+  nodeLabels:
+    node.kubernetes.io/exclude-from-external-load-balancers: null

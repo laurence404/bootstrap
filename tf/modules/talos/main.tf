@@ -2,7 +2,7 @@ terraform {
   required_providers {
     talos = {
       source  = "siderolabs/talos"
-      version = "0.9.0-alpha.0"
+      version = "0.10.0"
     }
   }
 }
@@ -56,12 +56,15 @@ resource "talos_machine_configuration_apply" "controlplane" {
             disk  = var.disk
             image = var.image
           }
+          features = {
+            diskQuotaSupport = true
+          }
         }
       }),
       file("${path.module}/files/volumeconfig.yaml"),
+      file("${path.module}/files/uservolumeconfig.yaml"),
     ],
     var.disk_encryption ? [templatefile("${path.module}/templates/systemdiskencryption.yaml.tmpl", { luks_passphrase = random_password.luks_passphrase.result })] : [],
-    var.disk_encryption ? [templatefile("${path.module}/templates/uservolumeconfig-encryption.yaml.tmpl", { luks_passphrase = random_password.luks_passphrase.result })] : [file("${path.module}/files/uservolumeconfig.yaml")],
   )
 }
 
