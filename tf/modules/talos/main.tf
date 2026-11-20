@@ -2,7 +2,7 @@ terraform {
   required_providers {
     talos = {
       source  = "siderolabs/talos"
-      version = "0.10.0"
+      version = "0.12.0"
     }
   }
 }
@@ -40,7 +40,7 @@ resource "talos_machine_configuration_apply" "controlplane" {
       file("${path.module}/files/cilium.yaml"),
       templatefile("${path.module}/templates/secrets.yaml.tmpl", {
         ssh_clone_url                 = var.ssh_clone_url
-        ssh_deploy_key                = indent(12, var.ssh_deploy_key)
+        ssh_deploy_key                = indent(6, var.ssh_deploy_key)
         cloudflare_cert_manager_token = var.cloudflare_cert_manager_token
         cloudflare_tunnel_token       = var.cloudflare_tunnel_token
       }),
@@ -51,12 +51,12 @@ resource "talos_machine_configuration_apply" "controlplane" {
         teamname            = var.cloudflare_team_name
         default_pss_profile = var.default_pss_profile
       }),
+      templatefile("${path.module}/templates/install.yaml.tmpl", {
+        image = var.image
+        disk  = var.disk
+      }),
       yamlencode({
         machine = {
-          install = {
-            disk  = var.disk
-            image = var.image
-          }
           features = {
             diskQuotaSupport = true
           }

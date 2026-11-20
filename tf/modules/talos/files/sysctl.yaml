@@ -1,5 +1,6 @@
-machine:
-  sysctls:
-    # For cloudflared: https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
-    net.core.rmem_max: "7500000"
-    net.core.wmem_max: "7500000"
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  # For cloudflared: https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
+  net.core.rmem_max: "7500000"
+  net.core.wmem_max: "7500000"
