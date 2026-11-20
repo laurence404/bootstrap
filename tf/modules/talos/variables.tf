@@ -65,3 +65,8 @@ variable "image" {
   description = "Talos install image"
   type        = string
 }
+
+variable "kubernetes_version" {
+  description = "Desired Kubernetes version"
+  type        = string
+}

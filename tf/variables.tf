@@ -97,5 +97,12 @@ variable "disk_encryption" {
 variable "image" {
   description = "Talos install image"
   type        = string
-  default     = "ghcr.io/siderolabs/installer:v1.12.0"
+  # The empty schematic (machine without customizations)
+  default     = "factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14.6"
+}
+
+variable "kubernetes_version" {
+  description = "Desired Kubernetes version"
+  type        = string
+  default     = "v1.37.0"
 }

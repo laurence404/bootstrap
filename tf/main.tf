@@ -20,7 +20,7 @@ module "github" {
 }
 
 module "talos" {
-  source             = "./modules/talos"
+  source                        = "./modules/talos"
   cloudflare_tunnel_token       = module.cloudflare.tunnel_token
   cloudflare_cert_manager_token = module.cloudflare.cert_manager_token
   cloudflare_aud                = module.cloudflare.aud
@@ -34,4 +34,5 @@ module "talos" {
   disk                          = var.disk
   disk_encryption               = var.disk_encryption
   image                         = var.image
+  kubernetes_version            = var.kubernetes_version
 }
