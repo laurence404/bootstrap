@@ -4,7 +4,7 @@ Some mobile apps don't support a web based login flow, like github authenticatio
 
 ### Certificate authentication
 
-In the Cloudflare dashboard for your domain, go to SSL/TLS then Client Certificates. Add the host `*.yourdomain.com`. Click "Create Certificate" - if you don't need to distinguish between certificates you can let Cloudflare create the certificate for you, else [create a CSR](https://developers.cloudflare.com/ssl/client-certificates/label-client-certificate/) with a CN of your choosing.
+In the Cloudflare dashboard for your domain, go to SSL/TLS then Client Certificates. Add the host `*.yourdomain.com` if not already present. Click "Create Certificate" - if you don't need to distinguish between certificates you can let Cloudflare create the certificate for you, else [create a CSR](https://developers.cloudflare.com/ssl/client-certificates/label-client-certificate/) with a CN of your choosing.
 
 You'll need to convert the certificate to PFX before importing with a strong password to avoid Android rejecting it:
 ```shell

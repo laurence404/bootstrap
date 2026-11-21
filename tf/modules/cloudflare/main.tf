@@ -264,17 +264,10 @@ resource "cloudflare_managed_transforms" "add_client_certificate" {
   managed_response_headers = []
 }
 
-# TODO: AI hallucination
-# Not supported in terraform - https://github.com/cloudflare/terraform-provider-cloudflare/issues/1044
-# Seen this API called from web console
-# https://developers.cloudflare.com/api/resources/certificate_authorities/
-# https://github.com/cloudflare/cloudflare-typescript/blob/main/src/resources/certificate-authorities/hostname-associations.ts
-#resource "cloudflare_certificate_authority_hostname_associations" "hostname_associations" {
-#  zone_id = data.cloudflare_zones.main.result[0].id
-#  hostname_associations {
-#    hostname = var.domain
-#  }
-#}
+resource "cloudflare_certificate_authorities_hostname_associations" "hostname_associations" {
+  zone_id = data.cloudflare_zones.main.result[0].id
+  hostnames = [ "*.${var.domain}" ]
+}
 
 data "cloudflare_api_token_permission_groups_list" "all" {
 }
@@ -297,8 +290,8 @@ resource "cloudflare_api_token" "cert_manager" {
       { "id" = local.api_token_zone_permissions_groups_map["DNS Write"] },
       { "id" = local.api_token_zone_permissions_groups_map["Zone Read"] },
     ]
-    resources = {
+    resources = jsonencode({
       "com.cloudflare.api.account.zone.${data.cloudflare_zones.main.result[0].id}" = "*"
-    }
+    })
   }]
 }
