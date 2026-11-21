@@ -4,3 +4,5 @@ params:
   # For cloudflared: https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
   net.core.rmem_max: "7500000"
   net.core.wmem_max: "7500000"
+  # Enable user namespaces: https://docs.siderolabs.com/kubernetes-guides/security/usernamespace
+  user.max_user_namespaces: "11255"
